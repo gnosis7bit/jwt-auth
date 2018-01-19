@@ -11,9 +11,11 @@
 
 namespace Tymon\JWTAuth\Claims;
 
+use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Support\Utils;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 class Factory
 {
@@ -157,7 +159,13 @@ class Factory
      */
     public function jti()
     {
-        return Str::random();
+        try {
+            $uuid1 = Uuid::uuid1()->toString();
+        } catch (UnsatisfiedDependencyException $e) {
+            $uuid1 = Str::random();
+        }
+
+        return $uuid1;
     }
 
     /**
